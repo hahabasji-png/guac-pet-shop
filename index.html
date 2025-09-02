@@ -1,60 +1,111 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Checkout - Guacamole GAG Hub</title>
+  <title>Guacamole GAG Hub</title>
+  <style>
+    body { font-family: sans-serif; max-width: 600px; margin:auto; background:#f8fdf2; padding:20px; border-radius:15px; }
+    .product { margin-bottom:15px; padding:10px; border-radius:10px; }
+    .queen { background:#fff6d1; }
+    .trex { background:#ffe1e6; }
+    button { padding:8px 12px; border:none; border-radius:8px; cursor:pointer; }
+    #checkoutSection { display:none; margin-top:20px; padding:15px; background:#d0f0fd; border-radius:10px; }
+  </style>
 </head>
-<body style="font-family:sans-serif; padding:20px; max-width:500px; margin:auto; background:#f8fdf2; border-radius:15px;">
-  <h1>Checkout</h1>
-  <p>Your purchase is nearly complete! Please enter your Discord username so we can deliver your items.</p>
+<body>
 
-  <ul id="cartItems">
-    <!-- Items will be listed here -->
-  </ul>
+  <h1 style="text-align:center; color:#4CAF50;">Guacamole GAG Hub</h1>
+  <p style="text-align:center;">Add your favorite pets to your cart!</p>
+
+  <!-- Products -->
+  <div class="product queen">
+    <h3>Queen Bee</h3>
+    <p>Price: $5</p>
+    <button onclick="addToCart('Queen Bee',5)">Add to Cart</button>
+  </div>
+
+  <div class="product trex">
+    <h3>T-Rex</h3>
+    <p>Price: $8</p>
+    <button onclick="addToCart('T-Rex',8)">Add to Cart</button>
+  </div>
+
+  <hr>
+
+  <!-- Cart -->
+  <h2>Cart</h2>
+  <ul id="cart"></ul>
   <p>Total: $<span id="total">0</span></p>
+  <button onclick="showCheckout()" style="background:#4CAF50; color:white; font-size:16px;">Checkout</button>
 
-  <input type="text" id="discordUser" placeholder="Enter your Discord username" style="width:100%; padding:10px; margin:10px 0; border-radius:8px; border:1px solid #ccc;">
-  <button onclick="submitOrder()" style="background:#4CAF50; color:white; border:none; padding:10px 15px; border-radius:8px; cursor:pointer;">Submit Order</button>
+  <!-- Checkout Form -->
+  <div id="checkoutSection">
+    <h2>Almost done!</h2>
+    <p>Enter your Discord username so we can handle your purchase:</p>
+    <input type="text" id="discordUser" placeholder="Discord username" style="width:100%; padding:10px; margin:10px 0; border-radius:8px; border:1px solid #ccc;">
+    <button onclick="submitOrder()" style="background:#4CAF50; color:white;">Submit Order</button>
+  </div>
 
-  <script>
-    // Example cart data (you can pass this from the previous page via query params or localStorage)
-    let cart = [
-      {item: "Queen Bee", price: 5},
-      {item: "T-Rex", price: 8}
-    ];
+<script>
+  let cart = [];
+  let total = 0;
 
-    let total = cart.reduce((sum, p) => sum + p.price, 0);
+  function addToCart(item, price) {
+    cart.push({item, price});
+    total += price;
+    updateCart();
+  }
 
-    let cartList = document.getElementById("cartItems");
+  function updateCart() {
+    let cartList = document.getElementById("cart");
+    cartList.innerHTML = "";
     cart.forEach(p => {
       let li = document.createElement("li");
-      li.textContent = `${p.item} - $${p.price}`;
+      li.textContent = p.item + " - $" + p.price;
       cartList.appendChild(li);
     });
     document.getElementById("total").textContent = total;
+  }
 
-    function submitOrder() {
-      let discordUser = document.getElementById("discordUser").value;
-      if(!discordUser) {
-        alert("Please enter your Discord username!");
-        return;
-      }
-
-      // Replace with your Discord webhook URL
-      let webhookUrl = "https://discord.com/api/webhooks/1412434264473079930/ru8gmyyFo8HlPxL5RU0krpRKy56gsaGJ6U1z58JD0u4vT7NnrvLRivuW9YhIzTAZ4D7I";
-
-      fetch(webhookUrl, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          content: `New Order!\nDiscord: ${discordUser}\nItems: ${cart.map(p => p.item + " - $" + p.price).join(", ")}\nTotal: $${total}`
-        })
-      }).then(() => {
-        alert("Order submitted! We will handle your purchase via Discord.");
-      }).catch(err => {
-        console.error(err);
-        alert("Failed to send order. Try again.");
-      });
+  function showCheckout() {
+    if(cart.length === 0) {
+      alert("Your cart is empty!");
+      return;
     }
-  </script>
+    document.getElementById("checkoutSection").style.display = "block";
+    window.scrollTo(0, document.body.scrollHeight);
+  }
+
+  function submitOrder() {
+    let discordUser = document.getElementById("discordUser").value;
+    if(!discordUser) {
+      alert("Please enter your Discord username!");
+      return;
+    }
+
+    // Replace this with your Discord webhook URL
+    let webhookUrl = "https://discord.com/api/webhooks/1412434264473079930/ru8gmyyFo8HlPxL5RU0krpRKy56gsaGJ6U1z58JD0u4vT7NnrvLRivuW9YhIzTAZ4D7I";
+
+    fetch(webhookUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        content: `New Order!\nDiscord: ${discordUser}\nItems: ${cart.map(p => p.item + " - $" + p.price).join(", ")}\nTotal: $${total}`
+      })
+    }).then(() => {
+      alert("Order submitted! We will handle your purchase via Discord.");
+      // Reset cart
+      cart = [];
+      total = 0;
+      updateCart();
+      document.getElementById("checkoutSection").style.display = "none";
+      document.getElementById("discordUser").value = "";
+    }).catch(err => {
+      console.error(err);
+      alert("Failed to send order. Try again.");
+    });
+  }
+</script>
+
 </body>
 </html>
+
