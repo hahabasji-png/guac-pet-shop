@@ -1,111 +1,174 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Guacamole GAG Hub</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guacamole GAG Hub Shop</title>
   <style>
-    body { font-family: sans-serif; max-width: 600px; margin:auto; background:#f8fdf2; padding:20px; border-radius:15px; }
-    .product { margin-bottom:15px; padding:10px; border-radius:10px; }
-    .queen { background:#fff6d1; }
-    .trex { background:#ffe1e6; }
-    button { padding:8px 12px; border:none; border-radius:8px; cursor:pointer; }
-    #checkoutSection { display:none; margin-top:20px; padding:15px; background:#d0f0fd; border-radius:10px; }
+    body {
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      background: url('https://www.google.com/imgres?q=guacamole%20background%20cartoonish&imgurl=https%3A%2F%2Ft3.ftcdn.net%2Fjpg%2F03%2F17%2F72%2F78%2F360_F_317727818_f65kpoWUtjeMRzCpmgAcQ9OfMdKEPpsv.jpg&imgrefurl=https%3A%2F%2Fstock.adobe.com%2Fsearch%3Fk%3Dcute%2Bavocado%2Bcartoon&docid=FGADTw9M2hrDeM&tbnid=y8Zz7d0V_X-ZQM&vet=12ahUKEwje88PqmLyPAxW9RmwGHYJvBq0QM3oECGsQAA..i&w=360&h=360&hcb=2&ved=2ahUKEwje88PqmLyPAxW9RmwGHYJvBq0QM3oECGsQAA');
+      background-repeat: repeat;
+      background-size: 200px;
+      margin: 0;
+      padding: 0;
+    }
+    h1 {
+      text-align: center;
+      color: #2b2b2b;
+      background: rgba(255, 255, 255, 0.7);
+      padding: 15px;
+      border-radius: 15px;
+      display: inline-block;
+      margin: 20px auto;
+      animation: bounce 2s infinite;
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      padding: 20px;
+    }
+    .card {
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 15px;
+      padding: 15px;
+      text-align: center;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+    }
+    .card img {
+      width: 120px;
+      height: 120px;
+      object-fit: contain;
+      margin-bottom: 10px;
+    }
+    .price {
+      font-size: 18px;
+      font-weight: bold;
+      margin: 10px 0;
+    }
+    button {
+      background: #4CAF50;
+      border: none;
+      color: white;
+      padding: 10px 15px;
+      font-size: 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    button:hover {
+      background: #45a049;
+      transform: scale(1.1);
+    }
+    #cart {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 20px;
+      margin: 20px;
+      border-radius: 15px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
   </style>
 </head>
 <body>
+  <h1>🥑 Welcome to Guacamole GAG Hub Shop 🥑</h1>
+  <div class="gallery" id="gallery"></div>
 
-  <h1 style="text-align:center; color:#4CAF50;">Guacamole GAG Hub</h1>
-  <p style="text-align:center;">Add your favorite pets to your cart!</p>
-
-  <!-- Products -->
-  <div class="product queen">
-    <h3>Queen Bee</h3>
-    <p>Price: $5</p>
-    <button onclick="addToCart('Queen Bee',5)">Add to Cart</button>
+  <div id="cart">
+    <h2>Your Cart</h2>
+    <ul id="cart-items"></ul>
+    <p><strong>Total: $<span id="total">0</span></strong></p>
+    <button onclick="checkout()">Checkout</button>
   </div>
 
-  <div class="product trex">
-    <h3>T-Rex</h3>
-    <p>Price: $8</p>
-    <button onclick="addToCart('T-Rex',8)">Add to Cart</button>
-  </div>
+  <script>
+    const pets = [
+      { name: "Red Kitsune", price: 50, img: "https://via.placeholder.com/120?text=Red+Kitsune" },
+      { name: "Disco Bee", price: 45, img: "https://via.placeholder.com/120?text=Disco+Bee" },
+      { name: "Racoon", price: 35, img: "https://via.placeholder.com/120?text=Racoon" },
+      { name: "C Kit", price: 3, img: "https://via.placeholder.com/120?text=C+Kit" },
+      { name: "Queen Bee", price: 4, img: "https://via.placeholder.com/120?text=Queen+Bee" },
+      { name: "Golden Goose", price: 3, img: "https://via.placeholder.com/120?text=Golden+Goose" },
+      { name: "FFF", price: 5, img: "https://via.placeholder.com/120?text=FFF" },
+      { name: "Mimic", price: 15, img: "https://via.placeholder.com/120?text=Mimic" },
+      { name: "Dragonfly", price: 5, img: "https://via.placeholder.com/120?text=Dragonfly" },
+      { name: "Spinosaurus", price: 15, img: "https://via.placeholder.com/120?text=Spino" },
+      { name: "Lobster", price: 3, img: "https://via.placeholder.com/120?text=Lobster" },
+      { name: "Titanics / Rainbows", price: "Negotiable", img: "https://via.placeholder.com/120?text=Titanic/Rainbow" },
+      { name: "Cockatrice", price: 30, img: "https://via.placeholder.com/120?text=Cockatrice" },
+      { name: "Grffin", price: 5, img: "https://via.placeholder.com/120?text=Grffin" },
+      { name: "Cats", price: 1.5, img: "https://via.placeholder.com/120?text=Cats" },
+      { name: "Owls", price: 1.5, img: "https://via.placeholder.com/120?text=Owls" },
+      { name: "Macaws", price: 1.5, img: "https://via.placeholder.com/120?text=Macaws" },
+      { name: "Frogs", price: 1.5, img: "https://via.placeholder.com/120?text=Frogs" },
+      { name: "1sx Sheckles Plant", price: 3, img: "https://via.placeholder.com/120?text=Sheckles+Plant" }
+    ];
 
-  <hr>
-
-  <!-- Cart -->
-  <h2>Cart</h2>
-  <ul id="cart"></ul>
-  <p>Total: $<span id="total">0</span></p>
-  <button onclick="showCheckout()" style="background:#4CAF50; color:white; font-size:16px;">Checkout</button>
-
-  <!-- Checkout Form -->
-  <div id="checkoutSection">
-    <h2>Almost done!</h2>
-    <p>Enter your Discord username so we can handle your purchase:</p>
-    <input type="text" id="discordUser" placeholder="Discord username" style="width:100%; padding:10px; margin:10px 0; border-radius:8px; border:1px solid #ccc;">
-    <button onclick="submitOrder()" style="background:#4CAF50; color:white;">Submit Order</button>
-  </div>
-
-<script>
-  let cart = [];
-  let total = 0;
-
-  function addToCart(item, price) {
-    cart.push({item, price});
-    total += price;
-    updateCart();
-  }
-
-  function updateCart() {
-    let cartList = document.getElementById("cart");
-    cartList.innerHTML = "";
-    cart.forEach(p => {
-      let li = document.createElement("li");
-      li.textContent = p.item + " - $" + p.price;
-      cartList.appendChild(li);
-    });
-    document.getElementById("total").textContent = total;
-  }
-
-  function showCheckout() {
-    if(cart.length === 0) {
-      alert("Your cart is empty!");
-      return;
-    }
-    document.getElementById("checkoutSection").style.display = "block";
-    window.scrollTo(0, document.body.scrollHeight);
-  }
-
-  function submitOrder() {
-    let discordUser = document.getElementById("discordUser").value;
-    if(!discordUser) {
-      alert("Please enter your Discord username!");
-      return;
+    let cart = [];
+    function renderGallery() {
+      const gallery = document.getElementById("gallery");
+      pets.forEach((pet, index) => {
+        const card = document.createElement("div");
+        card.className = "card";
+        card.innerHTML = `
+          <img src="${pet.img}" alt="${pet.name}">
+          <h3>${pet.name}</h3>
+          <p class="price">$${pet.price}</p>
+          <button onclick="addToCart(${index})">Add to Cart</button>
+        `;
+        gallery.appendChild(card);
+      });
     }
 
-    // Replace this with your Discord webhook URL
-    let webhookUrl = "https://discord.com/api/webhooks/1412434264473079930/ru8gmyyFo8HlPxL5RU0krpRKy56gsaGJ6U1z58JD0u4vT7NnrvLRivuW9YhIzTAZ4D7I";
-
-    fetch(webhookUrl, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        content: `New Order!\nDiscord: ${discordUser}\nItems: ${cart.map(p => p.item + " - $" + p.price).join(", ")}\nTotal: $${total}`
-      })
-    }).then(() => {
-      alert("Order submitted! We will handle your purchase via Discord.");
-      // Reset cart
-      cart = [];
-      total = 0;
+    function addToCart(index) {
+      cart.push(pets[index]);
       updateCart();
-      document.getElementById("checkoutSection").style.display = "none";
-      document.getElementById("discordUser").value = "";
-    }).catch(err => {
-      console.error(err);
-      alert("Failed to send order. Try again.");
-    });
-  }
-</script>
+    }
 
+    function updateCart() {
+      const cartItems = document.getElementById("cart-items");
+      const total = document.getElementById("total");
+      cartItems.innerHTML = "";
+      let sum = 0;
+      cart.forEach(item => {
+        const li = document.createElement("li");
+        li.textContent = `${item.name} - $${item.price}`;
+        cartItems.appendChild(li);
+        if (typeof item.price === "number") sum += item.price;
+      });
+      total.textContent = sum.toFixed(2);
+    }
+
+    function checkout() {
+      const discordUser = prompt("Enter your Discord username:");
+      if (!discordUser) return;
+      const orderDetails = cart.map(item => `${item.name} - $${item.price}`).join("\n");
+      const payload = {
+        content: `🛒 New Order!\n👤 Buyer: ${discordUser}\n${orderDetails}\nTotal: $${document.getElementById("total").textContent}`
+      };
+      fetch("YOUR_DISCORD_WEBHOOK_URL", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      }).then(() => {
+        alert("Order sent! We'll contact you on Discord.");
+        cart = [];
+        updateCart();
+      });
+    }
+
+    renderGallery();
+  </script>
 </body>
 </html>
+
 
