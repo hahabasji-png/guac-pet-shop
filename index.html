@@ -7,9 +7,7 @@
   <style>
     body {
       font-family: 'Comic Sans MS', cursive, sans-serif;
-      background: url('https://www.google.com/imgres?q=guacamole%20background%20cartoonish&imgurl=https%3A%2F%2Ft3.ftcdn.net%2Fjpg%2F03%2F17%2F72%2F78%2F360_F_317727818_f65kpoWUtjeMRzCpmgAcQ9OfMdKEPpsv.jpg&imgrefurl=https%3A%2F%2Fstock.adobe.com%2Fsearch%3Fk%3Dcute%2Bavocado%2Bcartoon&docid=FGADTw9M2hrDeM&tbnid=y8Zz7d0V_X-ZQM&vet=12ahUKEwje88PqmLyPAxW9RmwGHYJvBq0QM3oECGsQAA..i&w=360&h=360&hcb=2&ved=2ahUKEwje88PqmLyPAxW9RmwGHYJvBq0QM3oECGsQAA');
-      background-repeat: repeat;
-      background-size: 200px;
+      background: #4CAF50; /* green background */
       margin: 0;
       padding: 0;
     }
@@ -106,10 +104,10 @@
       { name: "Titanics / Rainbows", price: "Negotiable", img: "https://via.placeholder.com/120?text=Titanic/Rainbow" },
       { name: "Cockatrice", price: 30, img: "https://via.placeholder.com/120?text=Cockatrice" },
       { name: "Grffin", price: 5, img: "https://via.placeholder.com/120?text=Grffin" },
-      { name: "Cats", price: 1.5, img: "https://via.placeholder.com/120?text=Cats" },
-      { name: "Owls", price: 1.5, img: "https://via.placeholder.com/120?text=Owls" },
-      { name: "Macaws", price: 1.5, img: "https://via.placeholder.com/120?text=Macaws" },
-      { name: "Frogs", price: 1.5, img: "https://via.placeholder.com/120?text=Frogs" },
+      { name: "Cats (2x Combo)", price: 3, img: "https://via.placeholder.com/120?text=Cats" },
+      { name: "Owls (2x Combo)", price: 3, img: "https://via.placeholder.com/120?text=Owls" },
+      { name: "Macaws (2x Combo)", price: 3, img: "https://via.placeholder.com/120?text=Macaws" },
+      { name: "Frogs (2x Combo)", price: 3, img: "https://via.placeholder.com/120?text=Frogs" },
       { name: "1sx Sheckles Plant", price: 3, img: "https://via.placeholder.com/120?text=Sheckles+Plant" }
     ];
 
@@ -155,7 +153,7 @@
       const payload = {
         content: `🛒 New Order!\n👤 Buyer: ${discordUser}\n${orderDetails}\nTotal: $${document.getElementById("total").textContent}`
       };
-      fetch("YOUR_DISCORD_WEBHOOK_URL", {
+      fetch("https://discord.com/api/webhooks/1412434264473079930/ru8gmyyFo8HlPxL5RU0krpRKy56gsaGJ6U1z58JD0u4vT7NnrvLRivuW9YhIzTAZ4D7I", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)
