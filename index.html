@@ -146,9 +146,18 @@
       total.textContent = sum.toFixed(2);
     }
 
+    function validateDiscordUser(input) {
+      const tagFormat = /^.{2,32}#\d{4}$/; // username#1234
+      const idFormat = /^\d{17,20}$/; // numeric ID
+      return tagFormat.test(input) || idFormat.test(input);
+    }
+
     function checkout() {
-      const discordUser = prompt("Enter your Discord username:");
-      if (!discordUser) return;
+      const discordUser = prompt("Enter your Discord username (e.g. Name#1234 or UserID):");
+      if (!discordUser || !validateDiscordUser(discordUser)) {
+        alert("Invalid Discord username. Please use the format Name#1234 or a valid Discord ID.");
+        return;
+      }
       const orderDetails = cart.map(item => `${item.name} - $${item.price}`).join("\n");
       const payload = {
         content: `🛒 New Order!\n👤 Buyer: ${discordUser}\n${orderDetails}\nTotal: $${document.getElementById("total").textContent}`
