@@ -108,10 +108,11 @@
       { name: "Owls (2x Combo)", price: 3, img: "https://ik.imagekit.io/lughc9nsv/Owl.png?updatedAt=1756892120753" },
       { name: "Macaws (2x Combo)", price: 3, img: "https://ik.imagekit.io/lughc9nsv/image(2).png?updatedAt=1756891883696" },
       { name: "Frogs (2x Combo)", price: 3, img: "https://ik.imagekit.io/lughc9nsv/EchoFrog.png?updatedAt=1756892124734" },
-      { name: "1sx Sheckles Plant", price: 3, img: "https://via.placeholder.com/120?text=Sheckles+Plant" }
+      { name: "5sx Sheckles", price: 1, img: "https://via.placeholder.com/120?text=Sheckles+Plant" }
     ];
 
     let cart = [];
+
     function renderGallery() {
       const gallery = document.getElementById("gallery");
       pets.forEach((pet, index) => {
@@ -146,18 +147,9 @@
       total.textContent = sum.toFixed(2);
     }
 
-    function validateDiscordUser(input) {
-      const tagFormat = /^.{2,32}#\d{4}$/; // username#1234
-      const idFormat = /^\d{17,20}$/; // numeric ID
-      return tagFormat.test(input) || idFormat.test(input);
-    }
-
     function checkout() {
-      const discordUser = prompt("Enter your Discord username (e.g. Name#1234 or UserID):");
-      if (!discordUser || !validateDiscordUser(discordUser)) {
-        alert("Invalid Discord username. Please use the format Name#1234 or a valid Discord ID.");
-        return;
-      }
+      const discordUser = prompt("Enter your Discord username:");
+      if (!discordUser) return;
       const orderDetails = cart.map(item => `${item.name} - $${item.price}`).join("\n");
       const payload = {
         content: `🛒 New Order!\n👤 Buyer: ${discordUser}\n${orderDetails}\nTotal: $${document.getElementById("total").textContent}`
@@ -177,5 +169,3 @@
   </script>
 </body>
 </html>
-
-
